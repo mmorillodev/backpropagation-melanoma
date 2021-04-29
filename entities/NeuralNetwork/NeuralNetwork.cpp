@@ -12,12 +12,14 @@
 NeuralNetwork::NeuralNetwork(int inputSize, int outputSize) : inputSize(inputSize), outputSize(outputSize) {}
 
 void NeuralNetwork::addHiddenLayer(int neuronQtt) {
-    HiddenLayer layer = HiddenLayer(neuronQtt, this->inputSize);
+    int inputQtt = this->hiddenLayers.size() == 0 ? this->inputSize : this->hiddenLayers.back().neuronQtt;
+    HiddenLayer layer = HiddenLayer(neuronQtt, inputQtt);
     this->hiddenLayers.push_back(layer);
 }
 
 void NeuralNetwork::startTraining(string trainingFilePath) {
     HiddenLayer lastHiddenLayer = this->hiddenLayers.back();
+    // TODO: Create entity for output layer. Using Hidden due to same behaviour
     this->outputLayer = new HiddenLayer(this->outputSize, lastHiddenLayer.neuronQtt);
 
     // Input file stream

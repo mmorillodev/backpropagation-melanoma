@@ -1,0 +1,1 @@
+list<double> split_d(std::string str, char separator);
