@@ -7,7 +7,9 @@
 
 #include <list>
 #include <string>
+
 #include "../HiddenLayer/HiddenLayer.h"
+#include "NeuralNetworkArgs.h"
 
 using namespace std;
 
@@ -15,11 +17,10 @@ class NeuralNetwork {
 private:
     list<HiddenLayer> hiddenLayers;
     HiddenLayer *outputLayer;
-    int inputSize;
-    int outputSize;
+    NeuralNetworkArgs args;
 
 public:
-    explicit NeuralNetwork(int inputSize, int outputSize);
+    explicit NeuralNetwork(NeuralNetworkArgs args);
     void addHiddenLayer(int neuronQtt);
     void startTraining(string trainingFilePath);
 };

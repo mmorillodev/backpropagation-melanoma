@@ -3,6 +3,7 @@
 //
 
 #include <list>
+
 #include "HiddenNeuron/HiddenNeuron.h"
 
 #ifndef BACKPROPAGATION_MELANOMA_HIDDENLAYER_H

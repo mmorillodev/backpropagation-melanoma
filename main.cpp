@@ -1,12 +1,11 @@
 #include <iostream>
 #include <ctime>
 #include <cmath>
+
 #include "entities/NeuralNetwork/NeuralNetwork.h"
 #include "entities/HiddenLayer/HiddenNeuron/HiddenNeuron.h"
 #include "entities/NeuralNetwork/NeuralNetwork.h"
-
-//TODO: Remove later
-#define NEURON_QTT 5
+#include "entities/NeuralNetwork/NeuralNetworkArgs.h"
 
 #define INPUT_QTT 9
 #define OUTPUT_QTT 1
@@ -16,7 +15,13 @@
 using namespace std;
 
 int main() {
-    NeuralNetwork network = NeuralNetwork(INPUT_QTT, OUTPUT_QTT);
+    NeuralNetworkArgs args;
+    args.inputSize = INPUT_QTT;
+    args.outputSize = OUTPUT_QTT;
+    args.learningRate = LEARNING_RATE;
+    args.maximumError = MAXIMUM_ERROR;
+
+    NeuralNetwork network = NeuralNetwork(args);
     network.addHiddenLayer(24);
     network.addHiddenLayer(12);
 
@@ -25,6 +30,8 @@ int main() {
     return 0;
 }
 
+//TODO: Remove later
+#define NEURON_QTT 5
 
 //void oldVersion() {
 //    srand(time(nullptr));

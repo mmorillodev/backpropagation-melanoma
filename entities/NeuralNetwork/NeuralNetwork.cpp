@@ -9,10 +9,10 @@
 #include "NeuralNetwork.h"
 #include "../../utils.h"
 
-NeuralNetwork::NeuralNetwork(int inputSize, int outputSize) : inputSize(inputSize), outputSize(outputSize) {}
+NeuralNetwork::NeuralNetwork(NeuralNetworkArgs args) : args(args) {}
 
 void NeuralNetwork::addHiddenLayer(int neuronQtt) {
-    int inputQtt = this->hiddenLayers.size() == 0 ? this->inputSize : this->hiddenLayers.back().neuronQtt;
+    int inputQtt = this->hiddenLayers.size() == 0 ? this->args.inputSize : this->hiddenLayers.back().neuronQtt;
     HiddenLayer layer = HiddenLayer(neuronQtt, inputQtt);
     this->hiddenLayers.push_back(layer);
 }
@@ -20,7 +20,7 @@ void NeuralNetwork::addHiddenLayer(int neuronQtt) {
 void NeuralNetwork::startTraining(string trainingFilePath) {
     HiddenLayer lastHiddenLayer = this->hiddenLayers.back();
     // TODO: Create entity for output layer. Using Hidden due to same behaviour
-    this->outputLayer = new HiddenLayer(this->outputSize, lastHiddenLayer.neuronQtt);
+    this->outputLayer = new HiddenLayer(this->args.outputSize, lastHiddenLayer.neuronQtt);
 
     // Input file stream
     ifstream File(trainingFilePath);
