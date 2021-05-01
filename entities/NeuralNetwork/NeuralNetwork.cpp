@@ -7,26 +7,34 @@
 #include <list>
 
 #include "NeuralNetwork.h"
-#include "../../utils.h"
+#include "../../utilities/utils.h"
+#include "../../utilities/singleton/NeuralNetworkContext.h"
 
-NeuralNetwork::NeuralNetwork(NeuralNetworkArgs args) : args(args) {}
+NeuralNetwork::NeuralNetwork(NeuralNetworkArgs args) {
+    NeuralNetworkContext *context = NeuralNetworkContext::getInstance();
+    context->args = args;
+}
 
 void NeuralNetwork::addHiddenLayer(int neuronQtt) {
-    int inputQtt = this->hiddenLayers.size() == 0 ? this->args.inputSize : this->hiddenLayers.back().neuronQtt;
+    NeuralNetworkContext* context = NeuralNetworkContext::getInstance();
+
+    int inputQtt = this->hiddenLayers.size() == 0 ? context->args.inputSize : this->hiddenLayers.back().neuronQtt;
     HiddenLayer layer = HiddenLayer(neuronQtt, inputQtt);
     this->hiddenLayers.push_back(layer);
 }
 
 void NeuralNetwork::startTraining(string trainingFilePath) {
+    NeuralNetworkContext* context = NeuralNetworkContext::getInstance();
+
     HiddenLayer lastHiddenLayer = this->hiddenLayers.back();
     // TODO: Create entity for output layer. Using Hidden due to same behaviour
-    this->outputLayer = new HiddenLayer(this->args.outputSize, lastHiddenLayer.neuronQtt);
+    this->outputLayer = new HiddenLayer(context->args.outputSize, lastHiddenLayer.neuronQtt);
 
     // Input file stream
-    ifstream File(trainingFilePath);
+    ifstream trainingFile(trainingFilePath);
 
     string line;
-    while(getline(File, line)) {
+    while(getline(trainingFile, line)) {
         list<double> splittedList = split_d(line, ',');
 
         double *arr = new double[splittedList.size()];
@@ -40,6 +48,7 @@ void NeuralNetwork::startTraining(string trainingFilePath) {
     }
 
     //Cleanup
-    File.close();
+    trainingFile.close();
+    delete context;
     delete this->outputLayer;
 }

@@ -17,7 +17,6 @@ class NeuralNetwork {
 private:
     list<HiddenLayer> hiddenLayers;
     HiddenLayer *outputLayer;
-    NeuralNetworkArgs args;
 
 public:
     explicit NeuralNetwork(NeuralNetworkArgs args);

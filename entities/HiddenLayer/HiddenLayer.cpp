@@ -19,5 +19,5 @@ HiddenLayer::HiddenLayer(int neuronQtt, int inputSize): neuronQtt(neuronQtt), in
 }
 
 double* HiddenLayer::feedForward(double* data) {
-	return nullptr;
+	return data;
 }
