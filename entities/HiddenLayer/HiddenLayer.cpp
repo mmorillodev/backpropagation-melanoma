@@ -19,5 +19,13 @@ HiddenLayer::HiddenLayer(int neuronQtt, int inputSize): neuronQtt(neuronQtt), in
 }
 
 double* HiddenLayer::feedForward(double* data) {
-	return data;
+	double *resultPerNeuron = new double[this->neuronQtt];
+
+	for (int i = 0; i < this->neuronQtt; i++) {
+		resultPerNeuron[i] = this->neurons[i].process(data);
+	}
+
+	delete[] data;
+
+	return resultPerNeuron;
 }

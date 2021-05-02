@@ -23,11 +23,33 @@ void NeuralNetwork::addHiddenLayer(int neuronQtt) {
     this->hiddenLayers.push_back(layer);
 }
 
+NeuralIO NeuralNetwork::extractIO(list<double> vector) {
+    NeuralNetworkContext* context = NeuralNetworkContext::getInstance();
+    NeuralIO io;
+
+    io.inputs = new double[context->args.inputSize];
+    io.outputs = new double[context->args.outputSize];
+    
+    for (int i = 0; i < context->args.inputSize; i++) {
+        list<double>::iterator it = vector.begin();
+        advance(it, i);
+        io.inputs[i] = *it;
+    }
+
+    for (int i = 0, j = context->args.inputSize; i < context->args.outputSize; i++, j++) {
+        list<double>::iterator it = vector.begin();
+        advance(it, j);
+        io.outputs[i] = *it;
+    }
+
+    return io;
+}
+
 void NeuralNetwork::startTraining(string trainingFilePath) {
     NeuralNetworkContext* context = NeuralNetworkContext::getInstance();
 
     HiddenLayer lastHiddenLayer = this->hiddenLayers.back();
-    // TODO: Create entity for output layer. Using Hidden due to same behaviour
+    // TODO: Create entity for output layer. Using HiddenLayer due to same behaviour
     this->outputLayer = new HiddenLayer(context->args.outputSize, lastHiddenLayer.neuronQtt);
 
     // Input file stream
@@ -37,14 +59,16 @@ void NeuralNetwork::startTraining(string trainingFilePath) {
     while(getline(trainingFile, line)) {
         list<double> splittedList = split_d(line, ',');
 
-        double *arr = new double[splittedList.size()];
-        std::copy(splittedList.begin(), splittedList.end(), arr);
+        NeuralIO io = this->extractIO(splittedList);
         for (auto& layer : this->hiddenLayers) {
-            arr = layer.feedForward(arr);
+            io.inputs = layer.feedForward(io.inputs);
         }
 
+        // TODO: Handle output layer result
+        this->outputLayer->feedForward(io.inputs);
         
-        delete[] arr;
+        delete[] io.inputs;
+        delete[] io.outputs;
     }
 
     //Cleanup

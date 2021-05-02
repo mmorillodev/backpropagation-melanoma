@@ -13,10 +13,17 @@
 
 using namespace std;
 
+struct NeuralIO {
+    double* inputs;
+    double* outputs;
+};
+
 class NeuralNetwork {
 private:
     list<HiddenLayer> hiddenLayers;
     HiddenLayer *outputLayer;
+    
+    NeuralIO extractIO(list<double> vector);
 
 public:
     explicit NeuralNetwork(NeuralNetworkArgs args);
